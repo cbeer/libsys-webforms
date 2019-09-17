@@ -5,7 +5,9 @@ class EncumbranceReport < ApplicationRecord
   attr_accessor :fund_select, :show_dates, :fund, :fund_begin, :email, :status,
                 :date_ran, :date_request, :output_file, :fund_acct
 
-  validates :email, :status, :date_request, :output_file, presence: true
+  validates :email, presence: true
+  validates :fund, presence: true, if: -> { :fund_begin.blank? }
+  validates :fund_begin, presence: true, if: -> { :fund.blank? }
   validates :email, format: { with: Rails.configuration.email_pattern }, allow_blank: true
   validates :fund, presence: true, if: :blank_fund_begin?
   validates :fund_begin, presence: true, if: :blank_fund?

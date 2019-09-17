@@ -368,7 +368,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  activerecord-oracle_enhanced-adapter (~> 5.2.8)
+  activerecord-oracle_enhanced-adapter (~> 5.2.0)
   bootstrap-datepicker-rails
   bootstrap-sass
   bootstrap_form

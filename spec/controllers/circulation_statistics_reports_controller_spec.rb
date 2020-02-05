@@ -19,6 +19,16 @@ RSpec.describe CirculationStatisticsReportsController, type: :controller do
       get 'new'
       expect(response).to render_template('new')
     end
+
+    context 'with invalid login' do
+      before do
+        stub_current_user(FactoryBot.create(:blank_user))
+        get 'new'
+      end
+      it 'redirects to root_url' do
+        expect(response).to redirect_to(root_url)
+      end
+    end
   end
 
   describe 'get#home_locations' do

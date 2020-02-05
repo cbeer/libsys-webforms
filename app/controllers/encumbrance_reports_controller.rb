@@ -2,6 +2,7 @@
 # Controller to handle the Encumberances Report
 ###
 class EncumbranceReportsController < ApplicationController
+  load_and_authorize_resource
   before_action :set_no_cache
 
   rescue_from ActiveRecord::RecordNotFound do |exception|

@@ -2,6 +2,7 @@
 # Controller to handle the shelf selection report
 ###
 class ShelfSelectionReportsController < ApplicationController
+  load_and_authorize_resource
   include SymphonyCgi
   after_action only: :create do
     submit_shelf_selection(shelf_selection_report_params)

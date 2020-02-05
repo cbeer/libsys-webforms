@@ -2,6 +2,7 @@
 #  Controller to handle the Circulation Statistics Report
 ###
 class CirculationStatisticsReportsController < ApplicationController
+  load_and_authorize_resource
   def new
     @circulation_statistics_report = CirculationStatisticsReport.new
   end

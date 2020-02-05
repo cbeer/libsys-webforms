@@ -10,18 +10,13 @@ class Ability
     assign_staff_read_permission(current_user)
     assign_admin_permission(current_user)
     assign_basic_permission
-    assign_user_permission if current_user
-    assign_batch_permission if /A|Y/.match?(current_user.unicorn_updates)
-    alias_action :queue, :completed, :recent, to: :read
-    alias_action :menu, to: :read
+    alias_action :completed, :menu, :queue, :recent, to: :read
   end
 
-  def assign_basic_permission
+  def assign_basic_permission # must be authenticated
     can :manage, Ckey2bibframe
-  end
-
-  def assign_user_permission
-    can :manage, BatchRecordUpdate
+    can :manage, SsdsRequest
+    can :read, BatchRecordUpdate
   end
 
   def assign_staff_specified_permission(current_user)
@@ -37,17 +32,17 @@ class Ability
   end
 
   def assign_staff_read_permission(current_user)
-    can :read, EdiInvoice if /Y/.match?(current_user.edi_inv_view)
+    can :read, %i[EdiErrorReport EdiInvoice EdiLin] if /A|Y/.match?(current_user.edi_inv_view)
     can :read, Package if /A|Y/.match?(current_user.package_manage)
     can :read, PackageFile if /A|Y/.match?(current_user.package_manage)
   end
 
   def assign_staff_manage_permission(current_user)
     can :manage, AccessionNumberUpdate if /A|Y/.match?(current_user.accession_number)
-    can :manage, EdiInvoice if /A|Y/.match?(current_user.edi_inv_manage)
-    can :manage, EdiErrorReport if /A|Y/.match?(current_user.edi_inv_manage)
+    assign_batch_permission if /A|Y/.match?(current_user.unicorn_updates)
+    can :manage, %i[EdiErrorReport EdiInvLine EdiInvoice EdiLin] if /A|Y/.match?(current_user.edi_inv_manage)
     can :manage, LobbytrackReport if /A|Y/.match? current_user.lobbytrack_report
-    can :manage, ManagementReport if /A|Y/.match?(current_user.mgt_rpts)
+    assign_mgt_rpts_permission if /A|Y/.match?(current_user.mgt_rpts)
   end
 
   def assign_admin_permission(current_user)
@@ -67,11 +62,21 @@ class Ability
 
   def assign_batch_permission
     can :manage, BatchRecordUpdate
-    can :manage, ChangeItemType
     can :manage, ChangeCurrentLocation
     can :manage, ChangeHomeLocation
-    can :manage, WithdrawItem
+    can :manage, ChangeItemType
     can :manage, TransferItem
+    can :manage, UniUpdatesBatch
+    can :manage, WithdrawItem
+  end
+
+  def assign_mgt_rpts_permission
+    can :manage, CirculationStatisticsReport
+    can :manage, EncumbranceReport
+    can :manage, EndowedFundsReport
+    can :manage, %i[ExpenditureReport ExpendituresWithCircStatsReport]
+    can :manage, ManagementReport
+    can :manage, %i[ShelfSelectionReport ShelfSelSearch]
   end
 
   def dev_test_env?

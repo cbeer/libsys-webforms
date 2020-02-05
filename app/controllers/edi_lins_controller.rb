@@ -1,6 +1,7 @@
 # Controller for Edi Lines
 class EdiLinsController < ApplicationController
   def allow_nobib
+    authorize! :manage, @edi_lin if can? :manage, @edi_lin
     @edi_lin = EdiLin.all
     respond_to do |format|
       format.js # modal window: allow_nobib.js.erb
@@ -8,16 +9,19 @@ class EdiLinsController < ApplicationController
   end
 
   def fix_duplicate_barcode
+    authorize! :manage, @edi_lin if can? :manage, @edi_lin
     respond_to do |format|
       format.js # modal window: fix_duplicate_barcode.js.erb
     end
   end
 
   def show
+    authorize! :read, @edi_lin if can? :read, @edi_lin
     @edi_lin = EdiLin.where(barcode_num: params[:barcode_num])
   end
 
   def index
+    authorize! :read, @edi_lin if can? :read, @edi_lin
     @edi_lin = EdiLin.where(barcode_num: params[:barcode_num])
     if @edi_lin.size.zero?
       redirect_to(edi_invoices_menu_path, flash: { warning: "Barcode #{params[:barcode_num]} does not exist "\
@@ -31,6 +35,7 @@ class EdiLinsController < ApplicationController
   end
 
   def edit
+    authorize! :manage, @edi_lin if can? :manage, @edi_lin
     @edi_lin = EdiLin.where(vend_id: params[:vend_id],
                             doc_num: params[:doc_num],
                             edi_lin_num: params[:edi_lin_num],
@@ -39,6 +44,7 @@ class EdiLinsController < ApplicationController
   end
 
   def update_edi_lin
+    authorize! :manage, @edi_lin if can? :manage, @edi_lin
     @edi_lin_result = EdiLin.update_edi_lin(params[:vendors], params[:invoice_number], params[:invoice_line_number])
     flash[@edi_lin_result[0].to_sym] = @edi_lin_result[1]
 
@@ -46,6 +52,7 @@ class EdiLinsController < ApplicationController
   end
 
   def update_barcode
+    authorize! :manage, @edi_lin if can? :manage, @edi_lin
     @barcode_result = EdiLin.update_barcode(params[:vend_id],
                                             params[:doc_num],
                                             params[:edi_lin_num],

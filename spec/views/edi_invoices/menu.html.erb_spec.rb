@@ -1,21 +1,14 @@
 require 'rails_helper'
 
 RSpec.describe 'edi_invoices/menu', type: :view do
-  context 'when any user' do
+  context 'when authorized user to view' do
     before do
-      stub_current_user_for_view { FactoryBot.create(:blank_user) }
+      stub_current_user_for_view { FactoryBot.create(:authorized_user) }
       render
     end
 
     it 'displays the page header' do
       assert_select 'h1', text: 'EDIFACT invoice management'.to_s
-    end
-  end
-
-  context 'without authorized user' do
-    before do
-      stub_current_user_for_view { FactoryBot.create(:blank_user) }
-      render
     end
 
     it 'displays the page header' do
@@ -28,7 +21,7 @@ RSpec.describe 'edi_invoices/menu', type: :view do
     end
   end
 
-  context 'when authorized user' do
+  context 'when authorized user to manage' do
     before do
       stub_current_user_for_view { FactoryBot.create(:authorized_user) }
       render

@@ -1,10 +1,12 @@
 # Controller for EdiInvLine editing and updating
 class EdiInvLineController < ApplicationController
   def edit
+    authorize! :manage, @edi_inv_line if can? :manage, @edi_inv_line
     @edi_inv_line = EdiInvLine.find(params[:id])
   end
 
   def update
+    authorize! :manage, @edi_inv_line if can? :manage, @edi_inv_line
     @edi_inv_line = EdiInvLine.find(params[:id])
     if @edi_inv_line.update(edi_inv_line_params)
       params_updated = []

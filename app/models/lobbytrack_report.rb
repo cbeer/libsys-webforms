@@ -103,6 +103,7 @@ class LobbytrackReport
     ' WHERE IDNumber = @id'
   end
 
+  # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
   def self.visitor_hash(data)
     visitor = data.first
     {
@@ -114,9 +115,11 @@ class LobbytrackReport
       'StreetAddress' => visitor['StreetAddress'] || '',
       'City' => visitor['City'] || '',
       'State' => visitor['State'] || '',
-      'PostalCode' => visitor['PostalCode'] || ''
+      'PostalCode' => visitor['PostalCode'] || '',
+      'Photo' => visitor['Photo'] || ''
     }
   end
+  # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
   def self.location
     {
